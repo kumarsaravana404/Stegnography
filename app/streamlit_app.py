@@ -77,6 +77,8 @@ st.markdown(
 @st.cache_resource
 def load_models():
     """Load all available models"""
+    import joblib
+
     models = {}
     model_dir = "models"
 
@@ -86,12 +88,24 @@ def load_models():
     for filename in os.listdir(model_dir):
         if filename.endswith(".pkl") and not filename.endswith("_metadata.json"):
             model_name = filename.replace("_model.pkl", "").replace(".pkl", "")
+            model_path = os.path.join(model_dir, filename)
+
             try:
+                # Try loading as SteganographyDetector first
                 detector = SteganographyDetector()
-                detector.load_model(os.path.join(model_dir, filename))
+                detector.load_model(model_path)
                 models[model_name] = detector
-            except Exception as e:
-                st.warning(f"Could not load model {filename}: {e}")
+            except Exception as e1:
+                try:
+                    # Try loading as legacy/wrapped model
+                    detector = joblib.load(model_path)
+                    # Check if it has the required methods
+                    if hasattr(detector, "predict") and hasattr(detector, "model"):
+                        models[model_name] = detector
+                    else:
+                        st.warning(f"Model {filename} doesn't have required methods")
+                except Exception as e2:
+                    st.warning(f"Could not load model {filename}: {e1}, {e2}")
 
     return models
 

@@ -10,7 +10,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from features import process_directory
 
-MODEL_PATH = "model.pkl"
+MODEL_PATH = "models/random_forest_model.pkl"
 DATA_CLEAN = os.path.join("data", "clean")
 DATA_STEGO = os.path.join("data", "stego")
 
@@ -59,6 +59,7 @@ def train_model() -> None:
     print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
 
     # Save Model
+    os.makedirs("models", exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     print(f"Model saved to {MODEL_PATH}")
 

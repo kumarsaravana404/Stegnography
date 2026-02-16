@@ -1,0 +1,111 @@
+# Configuration file for Audio Steganography Detection System
+
+# Model Training Parameters
+training:
+  test_size: 0.2
+  random_state: 42
+  cross_validation_folds: 5
+
+  # Random Forest
+  random_forest:
+    n_estimators: 200
+    max_depth: 20
+    min_samples_split: 5
+    min_samples_leaf: 2
+    n_jobs: -1
+
+  # Gradient Boosting
+  gradient_boosting:
+    n_estimators: 100
+    learning_rate: 0.1
+    max_depth: 5
+
+  # SVM
+  svm:
+    C: 1.0
+    kernel: "rbf"
+    gamma: "scale"
+    probability: true
+
+  # CNN
+  cnn:
+    architecture: "standard" # Options: standard, deep, resnet
+    epochs: 50
+    batch_size: 32
+    learning_rate: 0.001
+    early_stopping_patience: 10
+
+# Feature Extraction Parameters
+features:
+  n_mfcc: 20
+  n_fft: 2048
+  hop_length: 512
+  spectrogram_size: [128, 128]
+
+# Data Paths
+paths:
+  data_dir: "data"
+  clean_dir: "data/clean"
+  stego_dir: "data/stego"
+  models_dir: "models"
+  visualizations_dir: "visualizations"
+
+# Dataset Generation
+dataset:
+  num_samples: 20
+  sample_rate: 44100
+  duration: 5 # seconds
+  use_complex_audio: true
+  steganography_techniques:
+    - "lsb_random"
+    - "lsb_message"
+    - "echo_hiding"
+
+# Web Application
+web_app:
+  title: "Audio Steganography Detection System"
+  port: 8501
+  theme: "dark"
+  max_upload_size_mb: 200
+  supported_formats:
+    - "wav"
+    - "mp3"
+    - "flac"
+    - "ogg"
+
+# Hyperparameter Tuning
+hyperparameter_tuning:
+  enabled: false
+  method: "grid_search" # Options: grid_search, random_search
+  cv_folds: 5
+  n_jobs: -1
+
+  # Grid search parameters
+  random_forest_grid:
+    n_estimators: [100, 200, 300]
+    max_depth: [10, 20, 30]
+    min_samples_split: [2, 5, 10]
+    min_samples_leaf: [1, 2, 4]
+
+  svm_grid:
+    C: [0.1, 1, 10]
+    kernel: ["rbf", "linear"]
+    gamma: ["scale", "auto"]
+
+  gradient_boosting_grid:
+    n_estimators: [50, 100, 200]
+    learning_rate: [0.01, 0.1, 0.2]
+    max_depth: [3, 5, 7]
+
+# Logging
+logging:
+  level: "INFO" # Options: DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/stego_detection.log"
+
+# Evaluation
+evaluation:
+  save_plots: true
+  save_metrics: true
+  metrics_format: "json" # Options: json, csv
+  plot_format: "png" # Options: png, pdf, svg

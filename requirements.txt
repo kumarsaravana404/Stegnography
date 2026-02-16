@@ -13,3 +13,4 @@ Pillow>=10.0.0
 pydub>=0.25.0
 tensorflow>=2.13.0
 opencv-python>=4.8.0
+pyyaml>=6.0.0
